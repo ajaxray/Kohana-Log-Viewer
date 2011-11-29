@@ -21,8 +21,6 @@ It's completely self explanatory. Here are some points for quick refs -
 - Formatted mode (default) may not extract all info correctly for displaying in rows. Use **raw mode** for those situations. _NEED IMPROVEMENT_ here. 
 - You can use *Level* listbox for filtering by log levels.
 
-![Kohana Log Viewer interface](http://ajaxray.com/files/log_formatted.png "Kohana Log Viewer interface")
-
 ### Notes:
 
 - _http://your-app-root/logs_ should display the log reports interface. If it don't, please check the routing in `modules/logviewer/init.php` 
