@@ -1,0 +1,113 @@
+/* Override some defaults */
+  html, body {
+    background-color: #eee;
+  }
+  body {
+    padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+  }
+  .container > footer p {
+    text-align: center; /* center align it with the container */
+  }
+
+  /* The white background content wrapper */
+  .content {
+    background-color: #fff;
+    padding: 20px;
+    margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+    -webkit-border-radius: 0 0 6px 6px;
+       -moz-border-radius: 0 0 6px 6px;
+            border-radius: 0 0 6px 6px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+            box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  }
+
+  /* Page header tweaks */
+  .page-header {
+    background-color: #F5F5F5;
+    height: 37px;
+    margin: -10px -20px 20px;
+    padding: 14px 20px 3px;
+  }
+  .well .page-header{
+      margin: -10px -10px 20px;
+      padding: 14px 10px 3px;
+  }
+
+  /* Styles you shouldn't keep as they are for displaying this base example only */
+  .content .span13,
+  .content .span3 {
+    min-height: 500px;
+  }
+  /* Give a quick and non-cross-browser friendly divider */
+  .content .span3 {
+    margin-left: 0;
+    padding-right: 19px;
+    border-right: 1px solid #eee;
+  }
+.span13 table{
+    width: auto !important;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+.pagination{
+    margin: 10px 0;
+}
+
+  .topbar .btn {
+    border: 0;
+  }
+  .topbar h1{
+      color: #1e90ff;
+      padding-top: 10px;
+  }
+
+.nav a {font-weight: bold; color: #708090;}
+.nav a:hover{color: #0d3349;}
+.nav .active a{
+    color: white;
+    text-shadow: 0 0 4px #1E90FF;
+}
+
+.utility { color: #708090;}
+.clear {clear: both;}
+
+/* Sidebar day list */
+.span3 .pills a {
+    background-color: #eeeeee;
+    padding: 0 50px;
+    margin-left: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+.span3 .pills .active a,
+.span3 .pills a:hover{
+    background-color: #666;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    padding-right: 60px;
+}
+
+/* Form to keep fields for table filter */
+.filter-form, .data-exporter {
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+td span.action {
+    position: absolute;
+    left: 325px;
+    font-size: 10px;
+    width: 54px;
+    padding: 2px;
+    background-color: #DDD;
+    margin-top: -28px;
+    display: block;
+}
+
+#category-list {
+    height: 405px;
+    overflow: auto;
+}
