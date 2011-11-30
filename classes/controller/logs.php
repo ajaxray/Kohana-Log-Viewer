@@ -16,7 +16,7 @@ class Controller_Logs extends Controller {
     function before()
     {
         $this->layout = new View('logs/layout');
-        $this->_logDir = APPPATH . 'logs';
+        $this->_logDir = Kohana::$config->load('logviewer.log_path');
 
         $today = getdate();
         $this->_year = $this->request->param('year', $today['year'] );
