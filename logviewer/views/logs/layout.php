@@ -44,7 +44,6 @@
             <?php include(Kohana::find_file('views/logs', 'monthlist')); ?>
         </div>
         <div class="row">
-            <?php echo Message::display(); ?>
             <div class="span3">
                 <?php include(Kohana::find_file('views/logs', 'daylist')); ?>
             </div>
