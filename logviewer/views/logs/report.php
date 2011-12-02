@@ -16,7 +16,7 @@
                 ?>
             </select>&nbsp;
             
-            <?php if($_GET['mode'] == 'raw'): ?>
+            <?php if(isset($_GET['mode']) and $_GET['mode'] == 'raw'): ?>
             <a class="btn success" href="?mode=formatted">formatted mode</a>
             <?php else: ?>
             <a class="btn info" href="?mode=raw">raw mode</a>
@@ -25,7 +25,7 @@
         </form>
     </div>
     <table class="zebra-striped" width="100%">
-        <?php if($_GET['mode'] != 'raw'): ?>
+        <?php if(isset($_GET['mode']) and $_GET['mode'] != 'raw'): ?>
         <thead>
             <tr>
                 <th width="5%">Level</th>
@@ -39,7 +39,7 @@
         <tbody>
             <?php foreach ($logs as $log):?>
             <tr>
-                <?php if($_GET['mode'] != 'raw'): ?>
+                <?php if(isset($_GET['mode']) and $_GET['mode'] != 'raw'): ?>
                 <td rowspan="2">
                     <span class="label <?php echo $log['style'] ?>"> <?php echo $log['level'] ?> </span>
                 </td>
