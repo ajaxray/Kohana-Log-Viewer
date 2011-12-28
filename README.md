@@ -3,7 +3,7 @@
 
 ### Disclaimer
 
-This module forks original one from anisniit adding suport for Kohana's 3.2 log file format, which includes stack trace
+This module forks original one from https://github.com/ajaxray adding suport for Kohana's 3.2 log file format, which includes stack trace
 
 ### Installation:
 
