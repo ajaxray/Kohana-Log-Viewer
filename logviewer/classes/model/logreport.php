@@ -36,22 +36,43 @@ class Model_Logreport{
     protected function _createLogEntries()
     {
         $pattern = "/(.*) --- ([A-Z]*): ([^:]*):? ([^~]*)~? (.*)/";
-        
+        $last_log = null;
+		$message = '';
+		$start_trace = false;
+		$i = 0;
         foreach($this->_rawContent as $logRaw) {
-            preg_match($pattern, $logRaw, $matches);
+			$logRaw = trim($logRaw);
+			if ($logRaw != '--' && $logRaw[0] != '#' && stripos($logRaw, 'STRACE') === FALSE) {
+				preg_match($pattern, $logRaw, $matches);
 
-            $log = array();
-            $log['raw'] = $logRaw;
-            if($matches) { 
-                $log['time'] = strtotime($matches[1]);
-                $log['level'] = $matches[2];    // Notice, Error etc.
-                $log['style'] = $this->_getStyle($matches[2]);    // CSS class for styling
-                $log['type'] = $matches[3];     // Exception name
-                $log['message'] = $matches[4];
-                $log['file'] = $matches[5];
-            }
+				$log = array();
+				$log['raw'] = $logRaw;
+				if($matches) { 
+					$log['time'] = strtotime($matches[1]);
+					$log['level'] = $matches[2];    // Notice, Error etc.
+					$log['style'] = $this->_getStyle($matches[2]);    // CSS class for styling
+					$log['type'] = $matches[3];     // Exception name
+					$log['message'] = $matches[4];
+					$log['file'] = $matches[5];
+				}
 
-            $this->_logEntries[] = $log;
+				$this->_logEntries[] = $log;
+				$last_log = $i;
+				$i++;
+			}
+			
+			if (stripos($logRaw, 'STRACE') !== FALSE) {
+				$this->_logEntries[$last_log]['message'] .= '<br/><br/><p>Stack Trace:</p><ol style="font-family:consolas;font-size:8pt">';
+			}
+			
+			if ($logRaw[0] == '#') {
+				$logRaw = preg_replace('/#\d /', '', $logRaw);
+				$this->_logEntries[$last_log]['message'] .= '<li>'.$logRaw . '</li>';
+			}
+			
+			if (preg_match('/\{main\}/', $logRaw)) {
+				$this->_logEntries[$last_log]['message'] .= '</ol>';
+			}
         }
     }
 
@@ -78,6 +99,3 @@ class Model_Logreport{
     }
 
 }
-
-
- 

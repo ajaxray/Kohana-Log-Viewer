@@ -1,4 +1,8 @@
-    <h2><?php echo $header ?></h2>
+<?php
+	$mode = isset($_GET['mode']) ? $_GET['mode'] : 'raw';
+?>
+
+<h2><?php echo $header ?></h2>
 
     <p>&nbsp;</p>
 
@@ -6,7 +10,7 @@
         <form name="mapping-filter" action="" class="pull-right">
 
             Level
-            <select class="input-small" name="levels" onchange="location='<?php echo URL::site("logs/$active_month/$active_day")?>/' + options[selectedIndex].value">
+            <select class="input-small" name="levels" onchange="location='<?php echo URL::site("logs/$active_month/$active_day")?>/' + options[selectedIndex].value + '/?mode=<?php echo $mode ?>'">
                 <option value="">--All--</option>
                 <?php 
                 foreach (Model_Logreport::$levels as $level):
@@ -16,7 +20,7 @@
                 ?>
             </select>&nbsp;
             
-            <?php if(isset($_GET['mode']) and $_GET['mode'] == 'raw'): ?>
+            <?php if($mode == 'raw'): ?>
             <a class="btn success" href="?mode=formatted">formatted mode</a>
             <?php else: ?>
             <a class="btn info" href="?mode=raw">raw mode</a>

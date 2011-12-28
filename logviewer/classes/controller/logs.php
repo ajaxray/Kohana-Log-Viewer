@@ -28,6 +28,10 @@ class Controller_Logs extends Controller {
 	public function action_index()
 	{
         //echo "$this->_year/$this->_month/$this->_day/$this->_level";
+
+		if (!$this->request->query('mode')) 
+			$this->request->redirect($this->request->uri().'?mode=raw');		
+		
         if($this->_getMonths()){
             $this->_setLayoutVars();
             $this->layout->set('content', $this->_getLogReport($this->_level));
