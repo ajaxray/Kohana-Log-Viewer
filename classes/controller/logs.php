@@ -93,7 +93,7 @@ class Controller_Logs extends Controller {
     private function _getDays()
     {
         $days = @scandir($this->_logDir . "/{$this->_year}/{$this->_month}");
-        if(empty($days)) return false;
+        if(empty($days)) return array();
 
         return array_slice($days, 2); // remove . and ..
     }
