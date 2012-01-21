@@ -107,7 +107,7 @@ class Controller_Logs extends Controller {
 
             if($level) {
                 foreach($logsEntries as $k => $entry){
-                  if($entry['level'] != $level) unset($logsEntries[$k]);
+                  if(Arr::get($entry, 'level') != $level) unset($logsEntries[$k]);
                 }
             }
 

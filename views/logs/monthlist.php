@@ -4,7 +4,7 @@
 <ul class="pills">
     <?php foreach($months as $month): ?>
     <li class="<?php if($active_month == $month) echo "active" ?>">
-        <a href="<?php echo URL::site("logs/$month") . '?mode='.$mode ?>"><?php echo $month ?></a>
+        <?php echo HTML::anchor("logs/$month/01/$log_level?mode=$mode", $month); ?></a>
     </li>
     <?php endforeach;?>
 </ul>
