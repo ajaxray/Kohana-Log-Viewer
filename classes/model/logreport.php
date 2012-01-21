@@ -62,7 +62,8 @@ class Model_Logreport{
 			}
 			
 			if (stripos($logRaw, 'STRACE') !== FALSE) {
-				$this->_logEntries[$last_log]['message'] .= '<br/><br/><p>Stack Trace:</p><ol style="font-family:consolas;font-size:8pt">';
+				$message = Arr::get($this->_logEntries[$last_log], 'message');
+				$this->_logEntries[$last_log]['message'] =  $message . '<br/><br/><p>Stack Trace:</p><ol style="font-family:consolas;font-size:8pt">';
 			}
 			
 			if ($logRaw[0] == '#') {
