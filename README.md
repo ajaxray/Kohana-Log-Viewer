@@ -1,6 +1,10 @@
 # Kohana 3.x Log Viewer module
 ## A Kohana module for exploring log files
 
+### Disclaimer
+
+This module forks original one from https://github.com/ajaxray adding suport for Kohana's 3.2 log file format, which includes stack trace
+
 ### Installation:
 
 1. Download this module and add the **logviewer** folder it to your `MODPATH`
@@ -28,4 +32,5 @@ It's completely self explanatory. Here are some points for quick refs -
 - If you want to improve, please fork and participate. 
 - If you've a suggestion or found a bug, please let me know at - anisniit(at)gmail.com
 - BE CAREFUL ABOUT USING ON PRODUCTION!
+
 

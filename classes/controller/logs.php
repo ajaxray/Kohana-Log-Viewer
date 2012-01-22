@@ -16,7 +16,7 @@ class Controller_Logs extends Controller {
     function before()
     {
         $this->layout = new View('logs/layout');
-        $this->_logDir = APPPATH . 'logs';
+        $this->_logDir = Kohana::$config->load('logviewer.log_path');
 
         $today = getdate();
         $this->_year = $this->request->param('year', $today['year'] );
@@ -28,6 +28,10 @@ class Controller_Logs extends Controller {
 	public function action_index()
 	{
         //echo "$this->_year/$this->_month/$this->_day/$this->_level";
+
+		if (!$this->request->query('mode')) 
+			$this->request->redirect($this->request->uri().'?mode=raw');		
+		
         if($this->_getMonths()){
             $this->_setLayoutVars();
             $this->layout->set('content', $this->_getLogReport($this->_level));
@@ -77,7 +81,7 @@ class Controller_Logs extends Controller {
                 $yearMonths = array_slice($yearMonths, 2);
                 array_walk($yearMonths, function(&$m, $k, $y)
                     {
-                        $m = $y . DIRECTORY_SEPARATOR . $m;
+                        $m = (substr($m,0,1) != ".") ? $y . DIRECTORY_SEPARATOR . $m : '';
                     }, $year);
 
                 $months = array_merge($months, $yearMonths);
@@ -89,7 +93,7 @@ class Controller_Logs extends Controller {
     private function _getDays()
     {
         $days = @scandir($this->_logDir . "/{$this->_year}/{$this->_month}");
-        if(empty($days)) return false;
+        if(empty($days)) return array();
 
         return array_slice($days, 2); // remove . and ..
     }
@@ -103,7 +107,7 @@ class Controller_Logs extends Controller {
 
             if($level) {
                 foreach($logsEntries as $k => $entry){
-                  if($entry['level'] != $level) unset($logsEntries[$k]);
+                  if(Arr::get($entry, 'level') != $level) unset($logsEntries[$k]);
                 }
             }
 
