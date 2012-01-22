@@ -1,4 +1,8 @@
-    <h2><?php echo $header ?></h2>
+<?php
+	$mode = isset($_GET['mode']) ? $_GET['mode'] : 'raw';
+?>
+
+<h2><?php echo $header ?></h2>
 
     <p>&nbsp;</p>
 
@@ -6,7 +10,7 @@
         <form name="mapping-filter" action="" class="pull-right">
 
             Level
-            <select class="input-small" name="levels" onchange="location='<?php echo URL::site("logs/$active_month/$active_day")?>/' + options[selectedIndex].value">
+            <select class="input-small" name="levels" onchange="location='<?php echo URL::site("logs/$active_month/$active_day")?>/' + options[selectedIndex].value + '/?mode=<?php echo $mode ?>'">
                 <option value="">--All--</option>
                 <?php 
                 foreach (Model_Logreport::$levels as $level):
@@ -16,7 +20,7 @@
                 ?>
             </select>&nbsp;
             
-            <?php if(isset($_GET['mode']) and $_GET['mode'] == 'raw'): ?>
+            <?php if($mode == 'raw'): ?>
             <a class="btn success" href="?mode=formatted">formatted mode</a>
             <?php else: ?>
             <a class="btn info" href="?mode=raw">raw mode</a>
@@ -25,7 +29,7 @@
         </form>
     </div>
     <table class="zebra-striped" width="100%">
-        <?php if(isset($_GET['mode']) and $_GET['mode'] != 'raw'): ?>
+        <?php if($mode != 'raw'): ?>
         <thead>
             <tr>
                 <th width="5%">Level</th>
@@ -39,21 +43,21 @@
         <tbody>
             <?php foreach ($logs as $log):?>
             <tr>
-                <?php if(isset($_GET['mode']) and $_GET['mode'] != 'raw'): ?>
+                <?php if($mode != 'raw'): ?>
                 <td rowspan="2">
-                    <span class="label <?php echo $log['style'] ?>"> <?php echo $log['level'] ?> </span>
+                    <span class="label <?php echo Arr::get($log,'style') ?>"> <?php echo Arr::get($log,'level') ?> </span>
                 </td>
-                <td><?php echo date('H:i:s', $log['time']) ?></td>
-                <td><?php echo $log['type'] ?></td>
-                <td><?php echo $log['file'] ?></td>
+                <td><?php echo date('H:i:s', Arr::get($log,'time')) ?></td>
+                <td><?php echo Arr::get($log,'type') ?></td>
+                <td><?php echo Arr::get($log,'file') ?></td>
 
             </tr>
-            <tr><td colspan="4"><b>Message: </b><?php echo $log['message'] ?></td></tr>
+            <tr><td colspan="4"><b>Message: </b><?php echo Arr::get($log,'message') ?></td></tr>
             <?php else: // Raw mode ?>
             <tr>
                 <td>
-                    <span class="label <?php echo $log['style'] ?>"> <?php echo $log['level'] ?></span> &nbsp;
-                    <?php echo $log['raw'] ?>
+                    <span class="label <?php echo Arr::get($log,'style') ?>"> <?php echo Arr::get($log,'level') ?></span> &nbsp;
+                    <?php echo Arr::get($log,'raw') ?>
                 </td>
             </tr>
             <?php endif; ?>
