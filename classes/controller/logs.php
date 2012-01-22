@@ -81,7 +81,7 @@ class Controller_Logs extends Controller {
                 $yearMonths = array_slice($yearMonths, 2);
                 array_walk($yearMonths, function(&$m, $k, $y)
                     {
-                        $m = $y . DIRECTORY_SEPARATOR . $m;
+                        $m = (substr($m,0,1) != ".") ? $y . DIRECTORY_SEPARATOR . $m : '';
                     }, $year);
 
                 $months = array_merge($months, $yearMonths);
