@@ -30,7 +30,7 @@ class Controller_Logs extends Controller {
         //echo "$this->_year/$this->_month/$this->_day/$this->_level";
 
 		if (!$this->request->query('mode')) 
-			$this->request->redirect($this->request->uri().'?mode=raw');		
+			$this->redirect($this->request->uri().'?mode=raw');		
 		
         if($this->_getMonths()){
             $this->_setLayoutVars();
