@@ -42,6 +42,7 @@ class Model_Logreport{
 		$i = 0;
         foreach($this->_rawContent as $logRaw) {
 			$logRaw = trim($logRaw);
+			if (empty($logRaw)) continue;
 			if ($logRaw != '--' && $logRaw[0] != '#' && stripos($logRaw, 'STRACE') === FALSE) {
 				preg_match($pattern, $logRaw, $matches);
 
