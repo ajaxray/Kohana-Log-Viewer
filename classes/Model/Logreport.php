@@ -35,7 +35,7 @@ class Model_Logreport{
 
     protected function _createLogEntries()
     {
-        $pattern = "/(.*) --- ([A-Z]*): ([^:]*):? ([^~]*)~? (.*)/";
+    	$pattern = "/(.*?) --- ([A-Z]*): (?:(?:([^:]*): ([^~]*)~ (.*))|(.*))/";
         $last_log = null;
 		$message = '';
 		$start_trace = false;
@@ -52,9 +52,15 @@ class Model_Logreport{
 					$log['time'] = strtotime($matches[1]);
 					$log['level'] = $matches[2];    // Notice, Error etc.
 					$log['style'] = $this->_getStyle($matches[2]);    // CSS class for styling
-					$log['type'] = $matches[3];     // Exception name
-					$log['message'] = $matches[4];
-					$log['file'] = $matches[5];
+					if (isset($matches[6])) {
+						$log['type'] = $log['file'] = '';
+						$log['message'] = isset($matches[6]) ? $matches[6] : '';
+					}
+					else {
+						$log['type'] = $matches[3];     // Exception name
+						$log['message'] = $matches[4];
+						$log['file'] = $matches[5];
+					}
 				}
 
 				$this->_logEntries[] = $log;
