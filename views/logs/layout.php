@@ -28,9 +28,6 @@
                 <h1>Kohana Log Viewer</h1>
               </div>
               <div class="span4">
-                <span class="pull-right utility">
-                    <a href="#">Settings</a>
-                </span>
               </div>
           </div>
         </div>
