@@ -15,6 +15,7 @@
  * - Replaced <?php echo ... into <?= - modern PHP understand this construction even short_tags=off
  * - Log level has now not STRICTLY EQUAL, but higher or equal than selected level. This is more appropriate
  * - Select from top-panel month bug (\ instead of /) workaround
+ * - Assets located outside of HTML code. You can specify strict location in config file, or use defaults
  */
 class Kohana_Model_Logreport{
 

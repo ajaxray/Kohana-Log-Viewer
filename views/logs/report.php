@@ -25,7 +25,9 @@
 			<?php else: ?>
 			<a class="btn info" href="?mode=raw"><?=__('raw mode')?></a>
 			<?php endif; ?>
+			<?php if($allow_delete): ?>
 			<a class="btn danger" href="<?=URL::site("logs/delete/$active_month/$active_report") ?>" onclick="return confirm('<?=__('Are you sure to delete?') ?>');"><?=__('delete this file')?></a>
+			<?php endif ?>
 		</form>
 	</div>
 	<table class="zebra-striped" width="100%">

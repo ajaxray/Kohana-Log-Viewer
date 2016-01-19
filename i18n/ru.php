@@ -1,6 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 return array(
+	'Home'=>'Вернуться на сайт',
 	'Level'=>'Важность',
 	'Time'=>'Время',
 	'Type'=>'Тип',
