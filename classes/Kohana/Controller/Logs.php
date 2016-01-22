@@ -29,6 +29,7 @@ class Kohana_Controller_Logs extends Controller {
 	private $_day;
 	private $_level;
 	protected $_config;
+	protected $_allow_delete=true;
 
 	function before()
 	{
@@ -37,7 +38,6 @@ class Kohana_Controller_Logs extends Controller {
 		$this->layout->bootstrap=$this->_config['bootstrap_css']?$this->_config['bootstrap_css']:'logs/bootstrap.css';
 		$this->layout->style=$this->_config['style_css']?$this->_config['style_css']:'logs/style.css';
 		$this->layout->jquery=$this->_config['jquery_js']?$this->_config['jquery_js']:'logs/jquery.js';
-		$this->layout->set_global('allow_delete',$this->_config['allow_delete']);
 		$this->_year = $this->request->param('year', date('Y') );
 		$this->_month = $this->request->param('month', date('m'));
 		$this->_day = $this->request->param('day', date('d'));
@@ -46,11 +46,8 @@ class Kohana_Controller_Logs extends Controller {
 
 	public function action_index()
 	{
-		//echo "$this->_year/$this->_month/$this->_day/$this->_level";
-
-		if (!$this->request->query('mode'))
-			$this->redirect($this->request->uri().'?mode=raw');
-
+		if($this->request->post('delete')==='yes')
+			return $this->log_delete();
 		if($this->_getMonths()){
 			$this->_setLayoutVars();
 			$this->layout->set('content', $this->_getLogReport($this->_level));
@@ -59,7 +56,6 @@ class Kohana_Controller_Logs extends Controller {
 				__('<b>No accessible log files!</b> Check if you\'ve enabled logging in bootstrap.'),
 			'error' ));
 		}
-
 		$this->response->body($this->layout);
 	}
 
@@ -77,7 +73,7 @@ class Kohana_Controller_Logs extends Controller {
 				$filename=Kohana::find_file('assets', 'jquery', 'js');
 				break;
 			default:
-				throw new HTTP_Exception_404('Элемент оформления :filename не найден', array(':filename' =>$filename));
+				throw new HTTP_Exception_404(__('Element :filename not found'), array(':filename' =>$filename));
 		}
 
 		$this->response->headers('Expires',gmdate('D, d M Y H:i:s \G\M\T', (int)KOHANA_START_TIME + (24 * 60 * 60)));
@@ -86,14 +82,17 @@ class Kohana_Controller_Logs extends Controller {
 		$this->response->send_file($filename,null,array('inline'=>true));
 	}
 
-	public function action_delete()
+	protected function log_delete()
 	{
-		if(!$this->_config['allow_delete'])
-			$this->Redirect("logs/$this->_year/$this->_month/$this->_day/?mode=raw");
-		$logfile = "/$this->_year/$this->_month/" . $this->request->param('logfile');
+		$logfile = "/$this->_year/$this->_month/" . $this->request->param('day').'.php';
 
-		if(@unlink($this->_config['log_path'] .'/'. $logfile)){
-			$this->layout->set('content', $this->_createMessage(__("<b>File deleted successfully!</b>"), 'success' ));
+		if(!$this->_allow_delete){
+			$this->layout->set(
+				'content',
+				$this->_createMessage(__('<b>Log deletion is prohibited</b>'),'error')
+			);
+		}else if(@unlink($this->_config['log_path'] .$logfile)){
+			$this->layout->set('content', $this->_createMessage(__('<b>File deleted successfully!</b>'), 'success' ));
 		} else {
 			$this->layout->set(
 				'content',
@@ -107,7 +106,7 @@ class Kohana_Controller_Logs extends Controller {
 		}
 
 		$this->_setLayoutVars();
-		$this->layout->set_global('active_day', "NO_DAY_SELECTED");
+		$this->layout->set_global('active_day', 'NO_DAY_SELECTED');
 		$this->response->body($this->layout);
 	}
 
@@ -120,6 +119,13 @@ class Kohana_Controller_Logs extends Controller {
 		$this->layout->set_global('active_day', $this->_day);
 		$this->layout->set_global('active_report', "$this->_day.php");
 		$this->layout->set_global('log_level', $this->_level);
+
+		$this->layout->set_global('allow_delete',$this->_allow_delete);
+		$mode=$this->request->query('mode');
+		// block hacking attempt
+		if(!in_array($mode,array('raw','formatted')))
+			$mode='raw';
+		$this->layout->set_global('mode',$mode);
 	}
 
 	private function _getMonths()

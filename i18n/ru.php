@@ -22,9 +22,11 @@ return array(
 	'<b>File (%s) deleting failed!</b> Is this file really exist?'=>'<strong>Файл %s не удалён!</strong> Проверьте права.',
 	'Log Report - %04d/%02d/%02d <small>%s logs</small>'=>'Протоколы за %3$02d.%2$02d.%1$04d <small>фильтрация: %4$s</small>',
 		// ВНИМАНИЕ! Предыдущий перевод меняет местами параметры, читайте http://php.net/manual/en/function.sprintf.php чтобы понять!
-	'<b>No log file found for %04d/%02d/%02d!</b> Please select a Log file from left sidebar.'=>'<strong>Протоколов за %3$02d.%2$02d.%1$04d не найдено!</strong> Обновите страницу (F5) и выберите другой файл из боковой панели',
+	'<b>No log file found for %04d/%02d/%02d!</b> Please select a Log file from left sidebar.'=>'<strong>Протоколов за %3$02d.%2$02d.%1$04d не найдено!</strong> Обновите страницу (F5) или выберите другой файл из боковой панели',
 	'formatted mode'=>'форматирование',
 	'raw mode'=>'без форматирования',
 	'delete this file'=>'удалить файл',
 	'Are you sure to delete?'=>'Вы уверены, что этот файл необходимо удалить?',
+	'<b>Log deletion is prohibited</b>'=>'<strong>Удаление протоколов запрещено настроками сайта</strong>',
+	'Element :filename not found'=>'Элемент оформления :filename не найден',
 );

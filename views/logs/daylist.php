@@ -1,6 +1,3 @@
-<?php
-	$mode = isset($_GET['mode']) ? $_GET['mode'] : 'raw';
-?>
 <ul class="pills">
     <?php foreach($days as $day): ?>
     <li class="<?php if($active_report == $day) echo "active" ?>">

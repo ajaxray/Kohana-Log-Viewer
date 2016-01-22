@@ -1,12 +1,15 @@
-<?php
-	$mode = isset($_GET['mode']) ? $_GET['mode'] : 'raw';
-?>
-
 <h2><?=$header ?></h2>
 
 	<p>&nbsp;</p>
 
 	<div class="row filter-form">
+		<?php if($allow_delete): ?>
+			<form action="<?=URL::site("logs/$active_month/$active_day?mode=$mode") ?>" method="POST" class="pull-right" style="margin-left: 1em;">
+				<input type="hidden" name="delete" value="yes"/>
+				<input type="submit" class="btn danger" onclick="return confirm('<?=__('Are you sure to delete?') ?>');" value="<?=__('delete this file')?>"/>
+			</form>
+		<?php endif ?>
+
 		<form name="mapping-filter" action="" class="pull-right">
 
 			<?=__('Level') ?>
@@ -25,9 +28,6 @@
 			<?php else: ?>
 			<a class="btn info" href="?mode=raw"><?=__('raw mode')?></a>
 			<?php endif; ?>
-			<?php if($allow_delete): ?>
-			<a class="btn danger" href="<?=URL::site("logs/delete/$active_month/$active_report") ?>" onclick="return confirm('<?=__('Are you sure to delete?') ?>');"><?=__('delete this file')?></a>
-			<?php endif ?>
 		</form>
 	</div>
 	<table class="zebra-striped" width="100%">

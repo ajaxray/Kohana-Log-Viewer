@@ -11,10 +11,9 @@ This module forks original one from https://github.com/ajaxray adding suport for
 1. Download this module and add the **logviewer** folder it to your `MODPATH`
 2. Enable it in the `bootstrap` file
 3. Specify custom `bootstrap.css`, `style.css`, `jquery.js` files in config file (copy it from `MODPATH/logviewer/config/logviewer.php` to `APPPATH/config/logviewer.php` and edit. You may skip this step, default assets will be used.
-4. Set `allow_delete` in your config file to `false` to disable log's deleting
-5. If you wish, you can translate LogViewer to any language, look at `MODPATH\logviewer/i18n/ru.php` for example. You may skip this step, if only English language is enough.
-6. Go to _http://your-app-root/logs_
-7. You are done!
+4. If you wish, you can translate LogViewer to any language, look at `MODPATH\logviewer/i18n/ru.php` for example. You may skip this step, if only English language is enough.
+5. Go to _http://your-app-root/logs_
+6. You are done!
 
 ![Kohana Log Viewer interface](http://ajaxray.com/files/log_formatted.png "Kohana Log Viewer interface")
 
@@ -37,9 +36,10 @@ LogViewer use standart Kohana naming convention, so you can easily extend it in 
 class Controller_Logs extends Kohana_Controller_Logs {
 	function before(){
 		$auth=new Auth_ORM(Kohana::$config->load('auth'));
-		$user=$auth->get_user();
-		if($user===null or !$user->logged_in(array(2))) // 2 - means, that user has administrator access
-			throw HTTP_Exception::factory(403,'Access denied')->request($this->request);
+		if(!$auth->logged_in('admin'))
+			throw HTTP_Exception::factory(403,__('Access denied'))->request($this->request);
+		// skip next line, if you don't want to limit log erasure
+		$this->_allow_delete=$auth->logged_in('power_admin');
 		parent::before();
 	}
 }
