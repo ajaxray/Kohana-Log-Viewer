@@ -4,13 +4,14 @@
 if (defined("PHP_SAPI") && PHP_SAPI == 'cli')
 	return;
 
-Route::set('logdelete', 'logs/delete/<year>/<month>/<logfile>', array('logfile' => '.*'))
-	->defaults(array(
-		'controller' => 'Logs',
-		'action'     => 'delete',
-	));
-Route::set('logviewer', 'logs/(<year>(/<month>(/<day>(/<level>))))')
+Route::set('logviewer', 'logs/(<year>(/<month>(/<day>(/<level>))))',array('year'=>'\d+','month'=>'\d+','day'=>'\d+'))
 	->defaults(array(
 		'controller' => 'Logs',
 		'action'     => 'index',
+	));
+
+Route::set('logviewerAsset', 'logs/<filename>',array('filename'=>'[A-Za-z\.]+'))
+	->defaults(array(
+		'controller' => 'Logs',
+		'action'     => 'asset',
 	));
