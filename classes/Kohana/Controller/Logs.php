@@ -35,9 +35,9 @@ class Kohana_Controller_Logs extends Controller {
 	{
 		$this->layout = new View('logs/layout');
 		$this->_config=Kohana::$config->load('logviewer');
-		$this->layout->bootstrap=$this->_config['bootstrap_css']?$this->_config['bootstrap_css']:'logs/bootstrap.css';
-		$this->layout->style=$this->_config['style_css']?$this->_config['style_css']:'logs/style.css';
-		$this->layout->jquery=$this->_config['jquery_js']?$this->_config['jquery_js']:'logs/jquery.js';
+		$this->layout->bootstrap=$this->_config['bootstrap_css']?$this->_config['bootstrap_css']:URL::site('logs/bootstrap.css');
+		$this->layout->style=$this->_config['style_css']?$this->_config['style_css']:URL::site('logs/style.css');
+		$this->layout->jquery=$this->_config['jquery_js']?$this->_config['jquery_js']:URL::site('logs/jquery.js');
 		$this->_year = $this->request->param('year', date('Y') );
 		$this->_month = $this->request->param('month', date('m'));
 		$this->_day = $this->request->param('day', date('d'));
