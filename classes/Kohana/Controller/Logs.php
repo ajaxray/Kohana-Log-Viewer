@@ -16,6 +16,8 @@
  * - Log level has now not STRICTLY EQUAL, but higher or equal than selected level. This is more appropriate
  * - Select from top-panel month bug (\ instead of /) workaround
  * - Assets located outside of HTML code. You can specify strict location in config file, or use defaults
+ * Modified on: 27 July 2016
+ * - only last 12 months are displayed, 13's month will jump to the next line, completely destroying layout
  */
 class Kohana_Controller_Logs extends Controller {
 
@@ -139,12 +141,19 @@ class Kohana_Controller_Logs extends Controller {
 			if ($yearMonths = @scandir($this->_config['log_path'] . '/' . $year)) {
 				$yearMonths = array_slice($yearMonths, 2);
 				array_walk($yearMonths, function(&$m, $k, $y){
-					$m = (substr($m,0,1) != ".") ? $y . DIRECTORY_SEPARATOR . $m : '';
+					$m = (substr($m,0,1) != ".") ? $y . '/' . $m : '';
 				}, $year);
-				$months = array_merge($months, $yearMonths);
+				// add to result list only folders, that contain files
+				foreach($yearMonths as $ym){
+					$test=@scandir($this->_config['log_path'].'/'.$ym);
+					if(count($test)>2) // not only . and .. in folder
+						$months[]=$ym;
+				}
 			}
 		}
-		return $months;
+		// slice to 12 most recent elements. 13's element will locate to second line, destroying layout
+		$cnt=count($months);
+		return ($cnt>12)?array_slice($months,$cnt-12):$months;
 	}
 
 	private function _getDays()
