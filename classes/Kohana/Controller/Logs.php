@@ -50,8 +50,8 @@ class Kohana_Controller_Logs extends Controller {
 	{
 		if($this->request->post('delete')==='yes')
 			return $this->log_delete();
+		$this->_setLayoutVars();
 		if($this->_getMonths()){
-			$this->_setLayoutVars();
 			$this->layout->set('content', $this->_getLogReport($this->_level));
 		} else {
 			$this->layout->set('content', $this->_createMessage(
@@ -133,7 +133,7 @@ class Kohana_Controller_Logs extends Controller {
 	private function _getMonths()
 	{
 		$years = @scandir($this->_config['log_path']);
-		if(empty($years)) return false;
+		if(empty($years)) return array();
 
 		$years = array_slice($years, 2); // remove . and ..
 		$months = array();

@@ -36,8 +36,8 @@
 			<tr>
 				<th width="5%"><?=__('Level') ?></th>
 				<th width="10%"><?=__('Time') ?></th>
-				<th width="30%"><?=('Type') ?></th>
-				<th width="65%"><?=('File') ?></th>
+				<th width="30%"><?=__('Type') ?></th>
+				<th width="65%"><?=__('File') ?></th>
 			</tr>
 
 		</thead>
@@ -54,7 +54,7 @@
 				<td><?=Arr::get($log,'file') ?></td>
 
 			</tr>
-			<tr><td colspan="4"><b><?=__('Message') ?>: </b><?=Arr::get($log,'message') ?></td></tr>
+			<tr><td colspan="4"><?=Arr::get($log,'message') ?></td></tr>
 			<?php else: // Raw mode ?>
 			<tr>
 				<td>
