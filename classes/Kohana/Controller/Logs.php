@@ -18,6 +18,8 @@
  * - Assets located outside of HTML code. You can specify strict location in config file, or use defaults
  * Modified on: 27 July 2016
  * - only last 12 months are displayed, 13's month will jump to the next line, completely destroying layout
+ * Modified on: 4 November 2016
+ * - prevent errors in view, when no logs folders are available
  */
 class Kohana_Controller_Logs extends Controller {
 

@@ -16,6 +16,11 @@
  * - Log level has now not STRICTLY EQUAL, but higher or equal than selected level. This is more appropriate
  * - Select from top-panel month bug (\ instead of /) workaround
  * - Assets located outside of HTML code. You can specify strict location in config file, or use defaults
+ * Modified on: 04 Novenber 2016
+ * modern Kohana writes exeption into two lines: EMERGENCY line, that describes exception type and INFO line,
+ * that describes position. It seems, that used algorithm was worked well for old Kohana versions, but now it
+ * can not combine this two lines. Fixed for Kohana 3.3, requires testing for previous Kohana's versions
+ * (if you can).
  */
 class Kohana_Model_Logreport{
 
