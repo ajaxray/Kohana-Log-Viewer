@@ -16,6 +16,11 @@
  * - Log level has now not STRICTLY EQUAL, but higher or equal than selected level. This is more appropriate
  * - Select from top-panel month bug (\ instead of /) workaround
  * - Assets located outside of HTML code. You can specify strict location in config file, or use defaults
+ * Modified on: 04 Novenber 2016
+ * modern Kohana writes exeption into two lines: EMERGENCY line, that describes exception type and INFO line,
+ * that describes position. It seems, that used algorithm was worked well for old Kohana versions, but now it
+ * can not combine this two lines. Fixed for Kohana 3.3, requires testing for previous Kohana's versions
+ * (if you can).
  */
 class Kohana_Model_Logreport{
 
@@ -78,15 +83,29 @@ class Kohana_Model_Logreport{
 
 		protected function _createLogEntries()
 		{
-			$pattern = "/(.*?) --- ([A-Z]*): (?:(?:([^:]*): ([^~]*)~ (.*))|(.*))/";
-			$last_log = null;
-			$message = '';
+			$pattern = "/(.*?) --- ([A-Z]*): (?:(?:([^:]*): ([^~]*) ~ (.*))|(.*))/";
 			$start_trace = false;
-			$i = 0;
+			$last_log=-1;
+			$startList='<ol style="font-family:consolas;font-size:-2">';
 			foreach($this->_rawContent as $logRaw) {
 				$logRaw = trim($logRaw);
 				if (empty($logRaw)) continue;
-				if ($logRaw != '--' && $logRaw[0] != '#' && stripos($logRaw, 'STRACE') === FALSE) {
+				if ($logRaw === '--'){
+
+				}else if (stripos($logRaw, 'STRACE') !== FALSE) {
+					$this->_logEntries[$last_log]['message'] .= '<br/><br/><p>Stack Trace:</p>'.$startList;
+				} else if (stripos($logRaw,'{main} ~ file [ line ]')!==FALSE or stripos($logRaw,'{main} in file:line')!==FALSE) {
+					if (substr($this->_logEntries[$last_log]['message'],-strlen($startList))==$startList)
+						$this->_logEntries[$last_log]['message']=substr($this->_logEntries[$last_log]['message'],0,-strlen($startList));
+					else
+						$this->_logEntries[$last_log]['message'] .= '</ol>';
+				}else if ($logRaw[0] == '#') {
+					$logRaw = preg_replace('/#\d /', '', $logRaw);
+					$this->_logEntries[$last_log]['message'] .= '<li>'.$logRaw . '</li>';
+				} else if (($pos=stripos($logRaw,'--- INFO: #0'))!==FALSE){
+					$this->_logEntries[$last_log]['message'] .= '<br/><p>'.substr($logRaw,$pos+12).'</p>'.$startList;
+					$this->_logEntries[$last_log]['raw'] .= '<br/>'.substr($logRaw,$pos+12);
+				} else {
 					preg_match($pattern, $logRaw, $matches);
 
 					$log = array();
@@ -105,24 +124,7 @@ class Kohana_Model_Logreport{
 							$log['file'] = $matches[5];
 						}
 					}
-
-					$this->_logEntries[] = $log;
-					$last_log = $i;
-					$i++;
-				}
-
-				if (stripos($logRaw, 'STRACE') !== FALSE) {
-					$message = Arr::get($this->_logEntries[$last_log], 'message');
-					$this->_logEntries[$last_log]['message'] =  $message . '<br/><br/><p>Stack Trace:</p><ol style="font-family:consolas;font-size:8pt">';
-				}
-
-				if ($logRaw[0] == '#') {
-					$logRaw = preg_replace('/#\d /', '', $logRaw);
-					$this->_logEntries[$last_log]['message'] .= '<li>'.$logRaw . '</li>';
-				}
-
-				if (preg_match('/\{main\}/', $logRaw)) {
-					$this->_logEntries[$last_log]['message'] .= '</ol>';
+					$this->_logEntries[++$last_log] = $log;
 				}
 			}
 		}

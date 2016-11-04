@@ -16,6 +16,10 @@
  * - Log level has now not STRICTLY EQUAL, but higher or equal than selected level. This is more appropriate
  * - Select from top-panel month bug (\ instead of /) workaround
  * - Assets located outside of HTML code. You can specify strict location in config file, or use defaults
+ * Modified on: 27 July 2016
+ * - only last 12 months are displayed, 13's month will jump to the next line, completely destroying layout
+ * Modified on: 4 November 2016
+ * - prevent errors in view, when no logs folders are available
  */
 class Kohana_Controller_Logs extends Controller {
 
@@ -35,9 +39,9 @@ class Kohana_Controller_Logs extends Controller {
 	{
 		$this->layout = new View('logs/layout');
 		$this->_config=Kohana::$config->load('logviewer');
-		$this->layout->bootstrap=$this->_config['bootstrap_css']?$this->_config['bootstrap_css']:'logs/bootstrap.css';
-		$this->layout->style=$this->_config['style_css']?$this->_config['style_css']:'logs/style.css';
-		$this->layout->jquery=$this->_config['jquery_js']?$this->_config['jquery_js']:'logs/jquery.js';
+		$this->layout->bootstrap=$this->_config['bootstrap_css']?$this->_config['bootstrap_css']:URL::site('logs/bootstrap.css');
+		$this->layout->style=$this->_config['style_css']?$this->_config['style_css']:URL::site('logs/style.css');
+		$this->layout->jquery=$this->_config['jquery_js']?$this->_config['jquery_js']:URL::site('logs/jquery.js');
 		$this->_year = $this->request->param('year', date('Y') );
 		$this->_month = $this->request->param('month', date('m'));
 		$this->_day = $this->request->param('day', date('d'));
@@ -48,8 +52,8 @@ class Kohana_Controller_Logs extends Controller {
 	{
 		if($this->request->post('delete')==='yes')
 			return $this->log_delete();
+		$this->_setLayoutVars();
 		if($this->_getMonths()){
-			$this->_setLayoutVars();
 			$this->layout->set('content', $this->_getLogReport($this->_level));
 		} else {
 			$this->layout->set('content', $this->_createMessage(
@@ -131,7 +135,7 @@ class Kohana_Controller_Logs extends Controller {
 	private function _getMonths()
 	{
 		$years = @scandir($this->_config['log_path']);
-		if(empty($years)) return false;
+		if(empty($years)) return array();
 
 		$years = array_slice($years, 2); // remove . and ..
 		$months = array();
@@ -139,12 +143,19 @@ class Kohana_Controller_Logs extends Controller {
 			if ($yearMonths = @scandir($this->_config['log_path'] . '/' . $year)) {
 				$yearMonths = array_slice($yearMonths, 2);
 				array_walk($yearMonths, function(&$m, $k, $y){
-					$m = (substr($m,0,1) != ".") ? $y . DIRECTORY_SEPARATOR . $m : '';
+					$m = (substr($m,0,1) != ".") ? $y . '/' . $m : '';
 				}, $year);
-				$months = array_merge($months, $yearMonths);
+				// add to result list only folders, that contain files
+				foreach($yearMonths as $ym){
+					$test=@scandir($this->_config['log_path'].'/'.$ym);
+					if(count($test)>2) // not only . and .. in folder
+						$months[]=$ym;
+				}
 			}
 		}
-		return $months;
+		// slice to 12 most recent elements. 13's element will locate to second line, destroying layout
+		$cnt=count($months);
+		return ($cnt>12)?array_slice($months,$cnt-12):$months;
 	}
 
 	private function _getDays()
