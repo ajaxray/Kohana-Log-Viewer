@@ -4,7 +4,7 @@
 if (defined("PHP_SAPI") && PHP_SAPI == 'cli')
 	return;
 
-Route::set('logviewer', 'logs/(<year>(/<month>(/<day>(/<level>))))',array('year'=>'\d+','month'=>'\d+','day'=>'\d+'))
+Route::set('logviewer', 'logs(/<year>(/<month>(/<day>(/<level>))))',array('year'=>'\d+','month'=>'\d+','day'=>'\d+'))
 	->defaults(array(
 		'controller' => 'Logs',
 		'action'     => 'index',
