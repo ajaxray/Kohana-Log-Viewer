@@ -176,7 +176,7 @@ class Kohana_Controller_Logs extends Controller {
 			if($level) {
 				$intlevel=array_search($level,Model_Logreport::$levels);
 				foreach($logsEntries as $k => $entry){
-				  if(array_search(Arr::get($entry, 'level'),Model_Logreport::$levels) > $intlevel)
+				  if(array_search(Arr::get($entry, 'level'),Model_Logreport::$levels) != $intlevel)
 				  	unset($logsEntries[$k]);
 				}
 			}
